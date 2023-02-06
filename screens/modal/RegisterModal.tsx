@@ -3,15 +3,18 @@ import {
     Alert,
     Platform,
     SafeAreaView,
+    ScrollView,
     Text,
     TouchableOpacity,
     View,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import CustomTextInput from "../../components/CustomTextInput";
-import axios from "axios";
-import { useUserStore } from "../../store";
 import { NavigationProp, StackActions } from "@react-navigation/native";
+import axios from "axios";
+
+import CustomTextInput from "../../components/CustomTextInput";
+import { useUserStore } from "../../store";
+import Layout from "../../constants/Layout";
 
 export default function RegisterModal({
     navigation,
@@ -145,94 +148,103 @@ export default function RegisterModal({
     } else {
         return (
             <SafeAreaView className="flex-auto justify-center items-center text-center">
-                <View className="min-w-[78%] max-w-[78%] justify-center">
-                    <View className="items-center p-8">
-                        <View className="w-[60%] border-b-2 items-center border-gray-300">
-                            <Text className="text-4xl p-2 text-gray-800">
-                                {userType}注册
-                            </Text>
+                <ScrollView className="min-w-full max-w-full">
+                    <View className="justify-center p-10">
+                        <View className="items-center p-8">
+                            <View className="w-[60%] border-b-2 items-center border-gray-300">
+                                <Text
+                                    className="p-2 text-gray-800"
+                                    style={{
+                                        fontSize: Layout.window.width * 0.07,
+                                    }}
+                                >
+                                    {userType}注册
+                                </Text>
+                            </View>
+                        </View>
+                        <CustomTextInput.Parent>
+                            <CustomTextInput.Child
+                                value={username}
+                                setValue={setUsername}
+                                placeholderText="用户名"
+                                secureTextEntry={false}
+                                autoCorrect={false}
+                            />
+                            {registerStatus.usernameEmpty && (
+                                <View className="ml-1">
+                                    <Text className="text-red-600 ">
+                                        {registerStatus.usernameEmptyMessage}
+                                    </Text>
+                                </View>
+                            )}
+                            <CustomTextInput.Child
+                                value={password}
+                                setValue={setPassword}
+                                placeholderText="密码"
+                                secureTextEntry={true}
+                                autoCorrect={false}
+                            />
+                            {registerStatus.passwordEmpty && (
+                                <View className="ml-1">
+                                    <Text className="text-red-600 ">
+                                        {registerStatus.passwordEmptyMessage}
+                                    </Text>
+                                </View>
+                            )}
+                            <CustomTextInput.Child
+                                value={confirmPassword}
+                                setValue={setConfirmPassword}
+                                placeholderText="确认密码"
+                                secureTextEntry={true}
+                                autoCorrect={false}
+                            />
+                            {registerStatus.passwordNotSame && (
+                                <View className="ml-1">
+                                    <Text className="text-red-600 ">
+                                        {registerStatus.passwordNotSameMessage}
+                                    </Text>
+                                </View>
+                            )}
+                            <CustomTextInput.Child
+                                value={phoneNumber ?? ""}
+                                setValue={setPhoneNumber}
+                                placeholderText="手机号码"
+                                secureTextEntry={false}
+                                keyboardType={
+                                    Platform.OS === "ios"
+                                        ? "number-pad"
+                                        : "numeric"
+                                }
+                            />
+                            {registerStatus.phoneNumberEmpty && (
+                                <View className="ml-1">
+                                    <Text className="text-red-600 ">
+                                        {registerStatus.phoneNumberEmptyMessage}
+                                    </Text>
+                                </View>
+                            )}
+                            <Picker
+                                selectedValue={gender}
+                                onValueChange={(itemValue, itemIndex) =>
+                                    setGender(itemValue)
+                                }
+                            >
+                                <Picker.Item label="男" value="男" />
+                                <Picker.Item label="女" value="女" />
+                            </Picker>
+                        </CustomTextInput.Parent>
+                        <View className="mt-5 items-center justify-center">
+                            <TouchableOpacity onPress={handleRegister}>
+                                <Text
+                                    className="text-xl text-blue-600"
+                                    style={{ paddingHorizontal: "8%" }}
+                                >
+                                    注册
+                                </Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
-                    <CustomTextInput.Parent>
-                        <CustomTextInput.Child
-                            value={username}
-                            setValue={setUsername}
-                            placeholderText="用户名"
-                            secureTextEntry={false}
-                            autoCorrect={false}
-                        />
-                        {registerStatus.usernameEmpty && (
-                            <View className="ml-1">
-                                <Text className="text-red-600 ">
-                                    {registerStatus.usernameEmptyMessage}
-                                </Text>
-                            </View>
-                        )}
-                        <CustomTextInput.Child
-                            value={password}
-                            setValue={setPassword}
-                            placeholderText="密码"
-                            secureTextEntry={true}
-                            autoCorrect={false}
-                        />
-                        {registerStatus.passwordEmpty && (
-                            <View className="ml-1">
-                                <Text className="text-red-600 ">
-                                    {registerStatus.passwordEmptyMessage}
-                                </Text>
-                            </View>
-                        )}
-                        <CustomTextInput.Child
-                            value={confirmPassword}
-                            setValue={setConfirmPassword}
-                            placeholderText="确认密码"
-                            secureTextEntry={true}
-                            autoCorrect={false}
-                        />
-                        {registerStatus.passwordNotSame && (
-                            <View className="ml-1">
-                                <Text className="text-red-600 ">
-                                    {registerStatus.passwordNotSameMessage}
-                                </Text>
-                            </View>
-                        )}
-                        <CustomTextInput.Child
-                            value={phoneNumber ?? ""}
-                            setValue={setPhoneNumber}
-                            placeholderText="手机号码"
-                            secureTextEntry={false}
-                            keyboardType={
-                                Platform.OS === "ios" ? "number-pad" : "numeric"
-                            }
-                        />
-                        {registerStatus.phoneNumberEmpty && (
-                            <View className="ml-1">
-                                <Text className="text-red-600 ">
-                                    {registerStatus.phoneNumberEmptyMessage}
-                                </Text>
-                            </View>
-                        )}
-                        <Picker
-                            selectedValue={gender}
-                            onValueChange={(itemValue, itemIndex) =>
-                                setGender(itemValue)
-                            }
-                        >
-                            <Picker.Item label="男" value="男" />
-                            <Picker.Item label="女" value="女" />
-                        </Picker>
-                    </CustomTextInput.Parent>
-                    <View className="mt-5 items-center justify-center">
-                        <TouchableOpacity onPress={handleRegister}>
-                            <Text
-                                className="text-xl text-blue-600"
-                                style={{ paddingHorizontal: "8%" }}
-                            >
-                                注册
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                </ScrollView>
             </SafeAreaView>
         );
     }

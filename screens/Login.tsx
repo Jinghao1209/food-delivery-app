@@ -5,12 +5,12 @@ import { useState } from "react";
 import {
     Text,
     View,
-    TextInput,
     TouchableOpacity,
     SafeAreaView,
 } from "react-native";
+
 import CustomTextInput from "../components/CustomTextInput";
-import { useUserStore } from "../store";
+import Layout from "../constants/Layout";
 
 export default function Login({
     setIsUser,
@@ -34,8 +34,6 @@ const LoginPage = ({
     setIsUser: any;
     navigation: NavigationProp<ReactNavigation.RootParamList>;
 }) => {
-    // const clientData = useUserStore((state) => state.data);
-    // marginvertical
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isLoginError, setIsLoginError] = useState(false);
@@ -69,7 +67,12 @@ const LoginPage = ({
         <View className="min-w-[78%] max-w-[78%] justify-center">
             <View className="items-center p-8">
                 <View className="w-[60%] border-b-2 items-center border-gray-300">
-                    <Text className="text-4xl p-2 text-gray-800">欢迎登录</Text>
+                    <Text
+                        className="p-2 text-gray-800"
+                        style={{ fontSize: Layout.window.width * 0.07 }}
+                    >
+                        欢迎登录
+                    </Text>
                 </View>
             </View>
             <CustomTextInput.Parent>
@@ -105,9 +108,9 @@ const LoginPage = ({
             </View>
             <View className="mt-5 flex items-center justify-center">
                 <View className="flex-row items-center">
-                    <View className="border-gray-500 border w-[40%] h-[1px]" />
+                    <View className="border w-[40%] h-[1px] bg-black" />
                     <Text className="m-2">或者</Text>
-                    <View className="border-gray-500 border w-[40%] h-[1px]" />
+                    <View className="border w-[40%] h-[1px] bg-black" />
                 </View>
             </View>
             <View className="flex-row items-center justify-center mt-4">
