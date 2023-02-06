@@ -20,9 +20,9 @@ const linking: LinkingOptions<RootStackParamList> = {
               HomePageScreen: 'one',
             },
           },
-          Settings: {
+          MySpace: {
             screens: {
-              SettingsScreen: 'two',
+              MySpace: 'two',
             },
           },
         },

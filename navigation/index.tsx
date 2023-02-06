@@ -5,22 +5,20 @@
  */
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-    NavigationContainer,
-    useNavigation,
-} from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import { Pressable } from "react-native";
 import HomeIcon from "react-native-heroicons/solid/HomeIcon";
-import CogIcon from "react-native-heroicons/solid/CogIcon";
+import UserIcon from "react-native-heroicons/solid/UserIcon";
+import ShoppingCartIcon from "react-native-heroicons/outline/ShoppingCartIcon";
+import ChatBubbleIcon from "react-native-heroicons/outline/ChatBubbleLeftEllipsisIcon";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/modal/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import HomePage from "../screens/HomePage";
-import SettingsScreen from "../screens/SettingsScreen";
+import MySpace from "../screens/MySpace";
 import {
     RootStackParamList,
     RootTabParamList,
@@ -31,6 +29,9 @@ import Login from "../screens/Login";
 import RegisterModal from "../screens/modal/RegisterModal";
 import { useUserStore } from "../store";
 import ResetPasswordModal from "../screens/modal/ResetPasswordModal";
+import Layout from "../constants/Layout";
+import ShoppingCart from "../screens/ShoppingCart";
+import MyMessage from "../screens/MyMessage";
 
 export default function Navigation() {
     return (
@@ -61,10 +62,15 @@ function RootNavigator() {
             />
             <Stack.Group screenOptions={{ presentation: "modal" }}>
                 <Stack.Screen name="Modal" component={ModalScreen} />
-                <Stack.Screen name="RegisterModal" component={RegisterModal} />
+                <Stack.Screen
+                    name="RegisterModal"
+                    component={RegisterModal}
+                    options={{ title: "注册界面" }}
+                />
                 <Stack.Screen
                     name="ResetPasswordModal"
                     component={ResetPasswordModal}
+                    options={{ title: "重设密码" }}
                 />
             </Stack.Group>
         </Stack.Navigator>
@@ -90,8 +96,11 @@ function BottomTabNavigator() {
         })();
     }, []);
 
+    // setListener for client in `AsyncStorageKey.CLIENT_DATA` value
     React.useEffect(() => {
         console.log(clientData);
+        // add new UI without login
+        if (process.env.NODE_ENV === "development") return setIsUser(true);
         if (typeof clientData.token !== "undefined") setIsUser(true);
         else setIsUser(false);
     }, [clientData]);
@@ -101,38 +110,44 @@ function BottomTabNavigator() {
         <BottomTab.Navigator
             initialRouteName="HomePage"
             screenOptions={{
-                tabBarActiveTintColor: Colors[colorScheme].tint,
+                tabBarActiveTintColor: Colors.blue.link,
+                // headerShown: Layout.isAndroid ? false : true
             }}
         >
             <BottomTab.Screen
                 name="HomePage"
                 component={HomePage}
                 options={({ navigation }: RootTabScreenProps<"HomePage">) => ({
-                    title: "Home",
+                    title: "主页",
                     tabBarIcon: ({ color }) => <HomeIcon color={color} />,
-                    headerRight: () => (
-                        <Pressable
-                            onPress={() => navigation.navigate("Modal")}
-                            style={({ pressed }) => ({
-                                opacity: pressed ? 0.5 : 1,
-                            })}
-                        >
-                            <FontAwesome
-                                name="info-circle"
-                                size={25}
-                                color={Colors[colorScheme].text}
-                                style={{ marginRight: 15 }}
-                            />
-                        </Pressable>
-                    ),
                 })}
             />
             <BottomTab.Screen
-                name="Settings"
-                component={SettingsScreen}
+                name="MyMessage"
+                component={MyMessage}
                 options={{
-                    title: "Settings",
-                    tabBarIcon: ({ color }) => <CogIcon color={color} />,
+                    title: "消息",
+                    tabBarIcon: ({ focused }) => (
+                        <ChatBubbleIcon color={focused ? "blue" : "black"} />
+                    ),
+                }}
+            />
+            <BottomTab.Screen
+                name="ShoppingCart"
+                component={ShoppingCart}
+                options={{
+                    title: "购物车",
+                    tabBarIcon: ({ color }) => (
+                        <ShoppingCartIcon color={color} />
+                    ),
+                }}
+            />
+            <BottomTab.Screen
+                name="MySpace"
+                component={MySpace}
+                options={{
+                    title: "我的界面",
+                    tabBarIcon: ({ color }) => <UserIcon color={color} />,
                 }}
             />
         </BottomTab.Navigator>

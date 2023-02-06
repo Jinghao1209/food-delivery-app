@@ -1,6 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
+
 import { AsyncStorageUserData, Unsure } from "../typings/types";
+import AsyncStorageKey from "../constants/AsyncStorageKey";
 
 export const useUserStore = create<{
     data: Unsure<AsyncStorageUserData>;
@@ -9,7 +11,7 @@ export const useUserStore = create<{
 }>((set, get) => ({
     data: {},
     async setAllData() {
-        const storeData = await AsyncStorage.getItem("client.key");
+        const storeData = await AsyncStorage.getItem(AsyncStorageKey.CLIENT_DATA);
         if (storeData) {
             try {
                 set({ data: JSON.parse(storeData) });
@@ -21,6 +23,6 @@ export const useUserStore = create<{
     async setData(data: Unsure<AsyncStorageUserData>) {
         set({ data: { ...get().data, ...data } });
         // TODO: set token
-        // await AsyncStorage.setItem("client.key", get().data);
+        // await AsyncStorage.setItem(AsyncStorageKey.CLIENT_DATA, get().data);
     },
 }));
