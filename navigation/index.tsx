@@ -10,15 +10,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import HomeIcon from "react-native-heroicons/solid/HomeIcon";
 import UserIcon from "react-native-heroicons/solid/UserIcon";
-import ShoppingCartIcon from "react-native-heroicons/outline/ShoppingCartIcon";
-import ChatBubbleIcon from "react-native-heroicons/outline/ChatBubbleLeftEllipsisIcon";
+import ShoppingCartIcon from "react-native-heroicons/solid/ShoppingCartIcon";
+import ChatBubbleIcon from "react-native-heroicons/solid/ChatBubbleLeftEllipsisIcon";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import ModalScreen from "../screens/modal/ModalScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import HomePage from "../screens/HomePage";
-import MySpace from "../screens/MySpace";
+import MySpace from "../screens/space";
 import {
     RootStackParamList,
     RootTabParamList,
@@ -110,7 +110,8 @@ function BottomTabNavigator() {
         <BottomTab.Navigator
             initialRouteName="HomePage"
             screenOptions={{
-                tabBarActiveTintColor: Colors.blue.link,
+                tabBarActiveTintColor: Colors.darkGreen.hex,
+                tabBarInactiveTintColor: Colors.darkGreen.light
                 // headerShown: Layout.isAndroid ? false : true
             }}
         >
@@ -127,9 +128,7 @@ function BottomTabNavigator() {
                 component={MyMessage}
                 options={{
                     title: "消息",
-                    tabBarIcon: ({ focused }) => (
-                        <ChatBubbleIcon color={focused ? "blue" : "black"} />
-                    ),
+                    tabBarIcon: ({ color }) => <ChatBubbleIcon color={color} />,
                 }}
             />
             <BottomTab.Screen
@@ -148,6 +147,7 @@ function BottomTabNavigator() {
                 options={{
                     title: "我的界面",
                     tabBarIcon: ({ color }) => <UserIcon color={color} />,
+                    headerShown: Layout.isAndroid ? false : true
                 }}
             />
         </BottomTab.Navigator>

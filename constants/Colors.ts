@@ -19,4 +19,18 @@ export default {
     blue: {
         link: "rgb(59,130,246)",
     },
+    darkGreen: {
+        hex: "#47684f",
+        original: "#669572",
+        light: "rgba(71, 104, 79, 0.5)"
+    },
+    green: {
+        hex: "#EEFAF2",
+    },
+    yellow: {
+        hex: "#FAECCB",
+    },
+    red: {
+        hex: "#F88D8D",
+    },
 };
