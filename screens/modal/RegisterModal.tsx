@@ -13,15 +13,17 @@ import { NavigationProp, StackActions } from "@react-navigation/native";
 import axios from "axios";
 
 import CustomTextInput from "../../components/CustomTextInput";
-import { useUserStore } from "../../store";
+import { useUserStore } from "../../store/userStore";
 import Layout from "../../constants/Layout";
+import API from "../../constants/API";
+import { API_Response } from "../../typings/api";
 
 export default function RegisterModal({
     navigation,
 }: {
     navigation: NavigationProp<ReactNavigation.RootParamList>;
 }) {
-    const setData = useUserStore((state) => state.setData);
+    const addData = useUserStore((state) => state.addData);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -103,17 +105,37 @@ export default function RegisterModal({
     };
 
     const confirmRegister = () => {
-        // TODO: handle api
-        // axios.post("/api/user/register", {
-        //     username,
-        //     password,
-        //     phone: phoneNumber,
-        //     gender,
-        //     userType
-        // });
+        let customUserType = 1;
 
-        setData({ token: "this is a token" });
-        navigation.dispatch(StackActions.pop(1));
+        if (userType === "商家") customUserType = 3;
+        else if (userType === "用户") customUserType = 1;
+        else if (userType === "骑手") customUserType = 2;
+
+        axios
+            .post(API.POST_REGISTER, {
+                username,
+                password,
+                phone: phoneNumber,
+                gender,
+                userType: customUserType,
+            })
+            .then((res) => {
+                // TODO: add types
+                let data = res.data as API_Response<{}>;
+
+                if (res.data.code === 201) {
+                    console.log(data);
+
+                    Alert.alert("注册成功", "快来登录吧！");
+                    navigation.dispatch(StackActions.pop(1));
+                } else {
+                    Alert.alert("注册失败", "请重试！");
+                }
+            })
+            .catch((e) => {
+                console.error(e);
+                Alert.alert("注册失败！");
+            });
     };
 
     if (!isConfirmUserType) {

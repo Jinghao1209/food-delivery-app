@@ -10,9 +10,6 @@ import Colors from "../constants/Colors";
 export default function NavigationLine(
     options: TouchableOpacityProps & {
         text: string;
-        marginHorizontal: string | number;
-        textMarginHorizontal?: string | number;
-        iconMarginHorizontal?: string | number;
     }
 ) {
     return (
@@ -20,21 +17,9 @@ export default function NavigationLine(
             className="justify-center m-1 rounded-xl bg-white"
             onPress={options.onPress}
         >
-            <View className="flex-row items-center justify-center min-w-max p-2">
-                <Text
-                    className="text-blue-500 text-base"
-                    style={{
-                        marginHorizontal: options.textMarginHorizontal ?? options.marginHorizontal,
-                    }}
-                >
-                    {options.text}
-                </Text>
-                <ChevronRightIcon
-                    style={{
-                        marginHorizontal: options.iconMarginHorizontal ?? options.marginHorizontal,
-                    }}
-                    color={Colors.blue.link}
-                />
+            <View className="flex-row items-center justify-between min-w-max p-2 px-4">
+                <Text className="text-blue-500">{options.text}</Text>
+                <ChevronRightIcon color={Colors.blue.link} size={20} />
             </View>
         </TouchableOpacity>
     );

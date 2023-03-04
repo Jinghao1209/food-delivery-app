@@ -1,5 +1,5 @@
 import { NavigationProp } from "@react-navigation/native";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import {
@@ -7,33 +7,34 @@ import {
     View,
     TouchableOpacity,
     SafeAreaView,
+    Alert,
 } from "react-native";
 
 import CustomTextInput from "../components/CustomTextInput";
+import API from "../constants/API";
 import Layout from "../constants/Layout";
+import { useUserStore } from "../store/userStore";
+import { API_Response } from "../typings/api";
 
 export default function Login({
-    setIsUser,
     navigation,
 }: {
-    setIsUser: any;
     navigation: NavigationProp<ReactNavigation.RootParamList>;
 }) {
     return (
         <SafeAreaView className="flex-auto justify-center items-center text-center">
-            <LoginPage setIsUser={setIsUser} navigation={navigation} />
+            <LoginPage navigation={navigation} />
             <StatusBar />
         </SafeAreaView>
     );
 }
 
 const LoginPage = ({
-    setIsUser,
     navigation,
 }: {
-    setIsUser: any;
     navigation: NavigationProp<ReactNavigation.RootParamList>;
 }) => {
+    const setUserData = useUserStore((state) => state.addData);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isLoginError, setIsLoginError] = useState(false);
@@ -41,17 +42,43 @@ const LoginPage = ({
     // TODO: handle login
     const handleLogin = async () => {
         try {
-            let res = await axios.post("/api/auth/login", {
+            let res = await axios.post(API.POST_LOGIN, {
                 username,
                 password,
             });
 
-            if (res) return setIsLoginError(true);
-            setIsLoginError(false);
-            setIsUser(true);
+            let data = res.data as API_Response<{
+                token: string;
+                userId: string;
+                userType: string;
+            }>;
+
+            if (data.code === 200) {
+                Alert.alert("登录成功", `${username}，欢迎回来！`);
+                setUserData({
+                    token: data.data.token,
+                    user: {
+                        id: data.data.userId,
+                        userType: data.data.userType,
+                        username,
+                    },
+                });
+
+                if (navigation.canGoBack()) navigation.goBack();
+                else navigation.navigate("Root");
+
+                setIsLoginError(false);
+            } else {
+                console.log(data); // check login error
+                setIsLoginError(true);
+            }
         } catch (e) {
-            setIsLoginError(true);
-            console.warn(e);
+            if (isAxiosError(e) && e.name === "Network Error") {
+                Alert.alert("网络错误", "请检查网路后再试");
+            } else {
+                setIsLoginError(true);
+                console.warn(e);
+            }
         }
     };
 
