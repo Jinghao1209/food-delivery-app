@@ -47,6 +47,7 @@ export type RootTabParamList = {
     HomePage: undefined;
     MyMessage: undefined;
     ShoppingCart: undefined;
+    MerchantPage: undefined;
     MySpace: undefined;
 };
 

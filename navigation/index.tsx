@@ -15,6 +15,7 @@ import ShoppingCartIcon from "react-native-heroicons/solid/ShoppingCartIcon";
 import ChatBubbleIcon from "react-native-heroicons/solid/ChatBubbleLeftEllipsisIcon";
 import MapPinIcon from "react-native-heroicons/solid/MapPinIcon";
 import SearchIcon from "react-native-heroicons/outline/MagnifyingGlassIcon";
+import BuildingStorefrontIcon from "react-native-heroicons/solid/BuildingStorefrontIcon";
 
 import Colors from "../constants/Colors";
 import ModalScreen from "../screens/modal/ModalScreen";
@@ -39,6 +40,8 @@ import { useCartStore } from "../store/useCartStore";
 import API from "../constants/API";
 import EditAccount from "../screens/space/EditAccount";
 import { API_Response, User } from "../typings/api";
+import MerchantPage from "../screens/merchant";
+import UserType from "../constants/UserType";
 
 export default function Navigation() {
     return (
@@ -202,6 +205,19 @@ function BottomTabNavigator() {
                     },
                 }}
             />
+            {typeof clientData.user?.userType !== "undefined" &&
+                clientData.user?.userType === UserType.MERCHANT && (
+                    <BottomTab.Screen
+                        name="MerchantPage"
+                        component={MerchantPage}
+                        options={{
+                            title: "商家管理",
+                            tabBarIcon: ({ color }) => (
+                                <BuildingStorefrontIcon color={color} />
+                            ),
+                        }}
+                    />
+                )}
             <BottomTab.Screen
                 name="ShoppingCart"
                 component={ShoppingCart}
