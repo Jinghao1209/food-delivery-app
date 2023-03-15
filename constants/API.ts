@@ -24,7 +24,7 @@ const GET_MAPPING = {
      * @requires PARAMS `userId`
      * @example API.GET_AVATAR + `userId`
      */
-    GET_AVATAR: `${BASE_URL}/api/user/getAvatar/`,
+    GET_AVATAR: `${BASE_URL}/api/user/avatar/`,
     /**
      * @requires PARAMS `userId`
      * @example API.GET_USER + `userId`
