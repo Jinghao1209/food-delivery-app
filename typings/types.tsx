@@ -65,5 +65,5 @@ export interface AsyncStorageData {
 /** @name INTERFACE.AsyncStorageUserData */
 export interface AsyncStorageUserData {
     token: string;
-    user: Unsure<User>;
+    user: User;
 }

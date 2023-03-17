@@ -8,7 +8,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import axios from "axios";
 import HomeIcon from "react-native-heroicons/solid/HomeIcon";
 import UserIcon from "react-native-heroicons/solid/UserIcon";
 import ShoppingCartIcon from "react-native-heroicons/solid/ShoppingCartIcon";
@@ -37,9 +36,7 @@ import SearchPage from "../screens/SearchPage";
 import MenuSelection from "../screens/MenuSelection";
 import { useUserStore } from "../store/userStore";
 import { useCartStore } from "../store/useCartStore";
-import API from "../constants/API";
 import EditAccount from "../screens/space/EditAccount";
-import { API_Response, User } from "../typings/api";
 import MerchantPage from "../screens/merchant";
 import UserType from "../constants/UserType";
 
@@ -130,11 +127,9 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
     const setAllUserData = useUserStore((state) => state.setAllData);
-    const setUserData = useUserStore((state) => state.setData);
     const setAllCartData = useCartStore((state) => state.setAllData);
     const clientData = useUserStore((state) => state.data);
     const navigation = useNavigation();
-    const [needGetData, setNeedGetData] = React.useState(true);
 
     React.useEffect(() => {
         (async () => {
@@ -148,18 +143,6 @@ function BottomTabNavigator() {
     // setListener for client in `AsyncStorageKey.CLIENT_DATA` value
     React.useEffect(() => {
         console.log("clientData", clientData);
-
-        if (typeof clientData.token !== "undefined" && needGetData) {
-            axios.get(API.GET_USER + clientData.user?.id).then((res) => {
-                const data = res.data as API_Response<User>;
-
-                setNeedGetData(false);
-                setUserData({
-                    token: clientData.token,
-                    user: data.data,
-                });
-            });
-        }
     }, [clientData]);
 
     return (
@@ -168,7 +151,6 @@ function BottomTabNavigator() {
             screenOptions={{
                 tabBarActiveTintColor: Colors.darkGreen.hex,
                 tabBarInactiveTintColor: Colors.darkGreen.light,
-                // headerShown: Layout.isAndroid ? false : true
             }}
         >
             <BottomTab.Screen

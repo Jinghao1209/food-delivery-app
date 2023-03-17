@@ -99,7 +99,7 @@ const DELETE_MAPPING = {
      * @requires PARAMS `userId`
      * @example API.DELETE_USER + `userId`
      */
-    DELETE_USER: `${BASE_URL}/api/user`,
+    DELETE_USER: `${BASE_URL}/api/user/`,
 };
 
 export default {

@@ -13,6 +13,7 @@ import {
 import CustomTextInput from "../components/CustomTextInput";
 import API from "../constants/API";
 import Layout from "../constants/Layout";
+import { getUserAvatar } from "../hooks/getUserAvatar";
 import { useUserStore } from "../store/userStore";
 import { API_Response } from "../typings/api";
 
@@ -39,7 +40,28 @@ const LoginPage = ({
     const [password, setPassword] = useState("");
     const [isLoginError, setIsLoginError] = useState(false);
 
-    // TODO: handle login
+    const getUserData = async (
+        userId: string,
+        token: string,
+        defaultData: any
+    ) => {
+        let res = await axios.get(API.GET_USER + userId, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (res.data.code < 200 || res.data.code >= 400) return defaultData;
+
+        let avatar = await getUserAvatar(token, userId);
+
+        if (avatar.success) {
+            res.data.data.avatar = avatar.data;
+        }
+
+        return res.data.data;
+    };
+
     const handleLogin = async () => {
         try {
             let res = await axios.post(API.POST_LOGIN, {
@@ -55,13 +77,17 @@ const LoginPage = ({
 
             if (data.code === 200) {
                 Alert.alert("登录成功", `${username}，欢迎回来！`);
+
                 setUserData({
                     token: data.data.token,
-                    user: {
+                    user: await getUserData(data.data.userId, data.data.token, {
                         id: data.data.userId,
-                        userType: data.data.userType,
                         username,
-                    },
+                        // TODO: store password might not be a good choice
+                        password,
+                        userType: data.data.userType,
+                        avatar: null,
+                    }),
                 });
 
                 if (navigation.canGoBack()) navigation.goBack();

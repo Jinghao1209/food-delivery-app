@@ -12,6 +12,8 @@ import CreditCardIcon from "react-native-heroicons/outline/CreditCardIcon";
 import TruckIcon from "react-native-heroicons/outline/TruckIcon";
 import RectangleGroupIcon from "react-native-heroicons/solid/RectangleGroupIcon";
 import UserCircleIcon from "react-native-heroicons/solid/UserCircleIcon";
+// @ts-ignore
+import { BASE_URL } from "@env";
 
 import NavigationLine from "../../components/NavigationLine";
 import Colors from "../../constants/Colors";
@@ -66,7 +68,7 @@ export default function MySpace({ navigation }: RootTabScreenProps<"MySpace">) {
                 <View className="flex-row p-3 pl-5">
                     {user.user?.avatar ? (
                         <Image
-                            source={{ uri: user.user?.avatar }}
+                            source={{ uri: BASE_URL + user.user?.avatar }}
                             className="h-16 w-16 rounded-xl"
                         />
                     ) : (
