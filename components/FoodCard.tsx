@@ -1,7 +1,7 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import PlusIcon from "react-native-heroicons/solid/PlusIcon";
 
-export default function ProductCard(options: FoodCardOptions) {
+export default function FoodCard(options: FoodCardOptions) {
     return (
         <View
             className={

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Alert, Image, ScrollView, Text, View } from "react-native";
 
-import ProductCard from "../components/ProductCard";
+import FoodCard from "../components/FoodCard";
 import API from "../constants/API";
 import { useCartStore } from "../store/useCartStore";
 import { API_Response, Product } from "../typings/api";
@@ -32,7 +32,7 @@ export default function MenuSelection({
                 setProducts(data.data);
             })
             .catch((e) => {
-                console.warn(e);
+                console.warn("screens/MenuSelection.tsx", e);
             })
             .finally(() => {
                 setIsGetComplete(true);
@@ -79,7 +79,7 @@ export default function MenuSelection({
                 <View>
                     {products.map((v, i) => {
                         return (
-                            <ProductCard
+                            <FoodCard
                                 key={v.id}
                                 image={v.photo}
                                 name={v.name}
