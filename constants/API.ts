@@ -51,6 +51,7 @@ const POST_MAPPING = {
     POST_AVATAR: `${BASE_URL}/api/user/upload-avatar/`,
     /**
      * @requires POST_BODY `INTERFACE.User`
+     * @requires PARAMS `roleId`
      * @see `INTERFACE.User`
      */
     POST_REGISTER: `${BASE_URL}/api/anonymous/register/`,
