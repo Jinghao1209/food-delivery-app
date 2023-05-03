@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, TextInput, TextInputProps, View, ViewProps } from "react-native";
 
 export default {
@@ -27,6 +27,14 @@ function TextInputChild(
     const endFocus = () => {
         if (props.value === "") setClassName(endFocusClassName);
     };
+
+    useEffect(() => {
+        if (props.value?.length !== undefined && props.value.length !== 0) {
+            onFocus();
+        } else {
+            endFocus();
+        }
+    }, [props.value]);
 
     return (
         <View style={{ marginVertical: "5%" }}>

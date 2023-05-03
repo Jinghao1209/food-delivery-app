@@ -31,8 +31,22 @@ export type RootStackParamList = {
         shop: Shop;
     };
 
+    /* Merchant Page */
+    CreateProductModal: {
+        shop: Shop;
+    };
+    CreateShopModal: undefined;
+    ManageShopPage: {
+        shop: Shop;
+    };
+    EditShopInfo: {
+        shop: Shop;
+    };
+
     /* My Space */
     EditAccount: undefined;
+
+    SelectLocation: undefined;
 
     /* Modal */
     Modal: undefined;

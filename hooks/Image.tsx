@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Image as OriginalImage,
     StyleProp,
@@ -13,6 +13,11 @@ export default function Image(state: {
     className?: string;
 }) {
     const [imageError, setImageError] = useState(false);
+    
+    useEffect(() => {
+        console.log("hooks/Image.tsx");
+        console.log(imageError);
+    }, [imageError])
 
     return (
         <OriginalImage

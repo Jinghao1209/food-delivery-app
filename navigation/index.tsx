@@ -15,6 +15,7 @@ import ChatBubbleIcon from "react-native-heroicons/solid/ChatBubbleLeftEllipsisI
 import MapPinIcon from "react-native-heroicons/solid/MapPinIcon";
 import SearchIcon from "react-native-heroicons/outline/MagnifyingGlassIcon";
 import BuildingStorefrontIcon from "react-native-heroicons/solid/BuildingStorefrontIcon";
+import InformationCircleIcon from "react-native-heroicons/outline/InformationCircleIcon";
 
 import Colors from "../constants/Colors";
 import ModalScreen from "../screens/modal/ModalScreen";
@@ -39,6 +40,11 @@ import { useCartStore } from "../store/useCartStore";
 import EditAccount from "../screens/space/EditAccount";
 import MerchantPage from "../screens/merchant";
 import UserType from "../constants/UserType";
+import CreateShopModal from "../screens/merchant/CreateShopModal";
+import ManageShopPage from "../screens/merchant/ManageShopPage";
+import CreateProductModal from "../screens/merchant/CreateProductModal";
+import EditShopInfo from "../screens/merchant/EditShopInfo";
+import SelectLocation from "../screens/SelectLocation";
 
 export default function Navigation() {
     return (
@@ -72,15 +78,54 @@ function RootNavigator() {
                 component={NotFoundScreen}
                 options={{ title: "Oops!" }}
             />
+            {/* TODO: Search Page */}
             <Stack.Screen
                 name="SearchPage"
                 component={SearchPage}
                 options={{ title: "搜索界面" }}
             />
+            {/* TODO: Edit Account */}
             <Stack.Screen
                 name="EditAccount"
                 component={EditAccount}
                 options={{ title: "修改个人信息" }}
+            />
+            {/* TODO: Edit Shop Info */}
+            <Stack.Screen
+                name="EditShopInfo"
+                component={EditShopInfo}
+                options={{ title: "修改商店信息" }}
+            />
+            <Stack.Screen
+                name="ManageShopPage"
+                component={ManageShopPage}
+                options={({ navigation, route }) => ({
+                    title: "管理商店",
+                    headerRight: (p) => (
+                        <Pressable
+                            onPress={() =>
+                                navigation.navigate(
+                                    "EditShopInfo",
+                                    route.params.shop
+                                )
+                            }
+                            style={({ pressed }) => ({
+                                opacity: pressed ? 0.5 : 1,
+                            })}
+                        >
+                            <InformationCircleIcon
+                                size={30}
+                                color={Colors.blue.link}
+                            />
+                        </Pressable>
+                    ),
+                })}
+            />
+            {/* TODO: Select Location */}
+            <Stack.Screen
+                name="SelectLocation"
+                component={SelectLocation}
+                options={{ title: "选择地址" }}
             />
             <Stack.Screen
                 name="MenuSelection"
@@ -113,6 +158,16 @@ function RootNavigator() {
                     name="ResetPasswordModal"
                     component={ResetPasswordModal}
                     options={{ title: "重设密码" }}
+                />
+                <Stack.Screen
+                    name="CreateShopModal"
+                    component={CreateShopModal}
+                    options={{ title: "创建商店" }}
+                />
+                <Stack.Screen
+                    name="CreateProductModal"
+                    component={CreateProductModal}
+                    options={{ title: "添加商品" }}
                 />
             </Stack.Group>
         </Stack.Navigator>
@@ -210,7 +265,9 @@ function BottomTabNavigator() {
                     ),
                     headerRight: () => (
                         <Pressable
-                            onPress={() => navigation.navigate("Modal")}
+                            onPress={() =>
+                                navigation.navigate("SelectLocation")
+                            }
                             style={({ pressed }) => ({
                                 opacity: pressed ? 0.5 : 1,
                             })}
