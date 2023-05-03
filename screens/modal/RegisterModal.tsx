@@ -17,6 +17,7 @@ import { useUserStore } from "../../store/userStore";
 import Layout from "../../constants/Layout";
 import API from "../../constants/API";
 import { API_Response } from "../../typings/api";
+import UserType from "../../constants/UserType";
 
 export default function RegisterModal({
     navigation,
@@ -105,20 +106,28 @@ export default function RegisterModal({
     };
 
     const confirmRegister = () => {
-        let customUserType = 1;
+        let roleId = 1;
 
-        if (userType === "商家") customUserType = 3;
-        else if (userType === "用户") customUserType = 1;
-        else if (userType === "骑手") customUserType = 2;
+        if (userType === "商家") roleId = 3;
+        else if (userType === "用户") roleId = 1;
+        else if (userType === "骑手") roleId = 2;
 
         axios
-            .post(API.POST_REGISTER, {
-                username,
-                password,
-                phone: phoneNumber,
-                gender,
-                userType: customUserType,
-            })
+            .post(
+                API.POST_REGISTER,
+                {
+                    username,
+                    password,
+                    phone: phoneNumber,
+                    gender,
+                    userType,
+                },
+                {
+                    params: {
+                        roleId,
+                    },
+                }
+            )
             .then((res) => {
                 // TODO: add types
                 let data = res.data as API_Response<{}>;
